@@ -1,0 +1,70 @@
+<%- include('./partials/header') %>
+<% if(success.length>0){ %>
+  <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+      <span class="inline-block mt-1 mb-1 text-white">
+          <%= success %>
+      </span>
+  </div>
+<% } %>
+
+<div class="min-h-screen bg-cover bg-no-repeat text-white font-serif" style="background-image: url('/images/image4.png');">
+  
+  <!-- Top Navigation Links (Right aligned) -->
+  <div class="flex justify-end items-center px-8 py-6">
+    <nav class="flex gap-6">
+      <a class="text-white text-lg font-medium hover:text-gray-300 transition" href="">All Products</a>
+      <a class="text-white text-lg font-medium hover:text-gray-300 transition" href="">Create New Product</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <main class="ml-40 flex-grow justify-center items-center px-4 pb-12">
+    <div class="w-full max-w-4xl bg-black/60 p-10 rounded-2xl shadow-lg border border-gray-700">
+      <h2 class="text-3xl font-semibold mb-8">Create New Product</h2>
+
+      <form autocomplete="off" action="/products/create" method="post" enctype="multipart/form-data" class="space-y-10">
+
+        <!-- Product Details -->
+        <section>
+          <h3 class="text-xl font-semibold mb-4">Product Details</h3>
+
+          <div class="mb-6">
+            <label class="block mb-2 text-sm text-white">Product Image</label>
+            <input name="image" type="file"
+              class="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 file:text-black hover:file:bg-gray-300 transition" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input name="name" type="text" placeholder="Product Name"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input name="price" type="text" placeholder="Product Price"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input name="discount" type="text" placeholder="Discount Price"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 md:col-span-2" />
+          </div>
+        </section>
+
+        <!-- Panel Details -->
+        <section>
+          <h3 class="text-xl font-semibold mb-4">Panel Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input name="bgcolor" type="text" placeholder="Background Color"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input name="panelcolor" type="text" placeholder="Panel Color"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input name="textcolor" type="text" placeholder="Text Color"
+              class="bg-black/70 text-white border border-gray-600 p-3 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 md:col-span-2" />
+          </div>
+        </section>
+
+        <!-- Submit Button -->
+        <div>
+          <input type="submit" value="Create New Product"
+            class="bg-white text-black font-semibold py-3 px-6 rounded-lg shadow hover:bg-gray-200 transition" />
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<%- include('./partials/footer') %>
