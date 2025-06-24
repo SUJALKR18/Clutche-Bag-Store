@@ -90,35 +90,40 @@
         let total = subtotal + platformFee + shipping;
       %>
 
-      <div class="text-sm space-y-3 text-white/90">
-        <div class="flex justify-between">
-          <span>Total MRP</span>
-          <span>₹<%= originalTotal %></span>
-        </div>
-        <div class="flex justify-between">
-          <span>Discount on MRP</span>
-          <span>-₹<%= discountTotal %></span>
-        </div>
-        <div class="flex justify-between">
-          <span>Platform Fee</span>
-          <span>₹<%= platformFee %></span>
-        </div>
-        <div class="flex justify-between">
-          <span>Shipping Fee</span>
-          <span><%= shipping === 0 ? 'FREE' : '₹' + shipping %></span>
+      <% if (cartItems.length > 0) { %>
+        <div class="text-sm space-y-3 text-white/90">
+          <div class="flex justify-between">
+            <span>Total MRP</span>
+            <span>₹<%= originalTotal %></span>
+          </div>
+          <div class="flex justify-between">
+            <span>Discount on MRP</span>
+            <span>-₹<%= discountTotal %></span>
+          </div>
+          <div class="flex justify-between">
+            <span>Platform Fee</span>
+            <span>₹<%= platformFee %></span>
+          </div>
+          <div class="flex justify-between">
+            <span>Shipping Fee</span>
+            <span><%= shipping === 0 ? 'FREE' : '₹' + shipping %></span>
+          </div>
+
+          <div class="flex justify-between border-t pt-4 mt-3 border-yellow-400/20 font-semibold text-lg text-green-400">
+            <span>Total Amount</span>
+            <span>₹<%= total %></span>
+          </div>
         </div>
 
-        <div class="flex justify-between border-t pt-4 mt-3 border-yellow-400/20 font-semibold text-lg text-green-400">
-          <span>Total Amount</span>
-          <span>₹<%= total %></span>
-        </div>
-      </div>
-
-      <form action="/checkout" method="POST">
-        <button class="mt-6 w-full bg-yellow-400 text-black py-3 rounded-xl font-semibold hover:bg-yellow-300 transition duration-200">
-          Proceed to Checkout
-        </button>
-      </form>
+        <!-- Proceed Button -->
+        <form action="/checkout" method="POST">
+          <button class="mt-6 w-full bg-yellow-400 text-black py-3 rounded-xl font-semibold hover:bg-yellow-300 transition duration-200">
+            Proceed to Checkout
+          </button>
+        </form>
+      <% } else { %>
+        <p class="text-center text-sm text-gray-400 mt-4">Your cart is empty. Add items to proceed.</p>
+      <% } %>
     </div>
   </div>
 </div>
