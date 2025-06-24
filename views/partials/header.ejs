@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clutche</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="font-['helvetica_now_display']">
-    <nav class="w-full fixed top-0 left-0 px-5 py-3">
-        <h3 class="text-3xl text-white">Clutche</h3>
-    </nav>
+<body class="font-['helvetica_now_display'] bg-black text-white">
+
+  <!-- Header/Navbar -->
+  <nav class="w-full fixed top-0 left-0 px-2 py-2 flex items-center justify-between z-50">
+    <h3 class="text-3xl">Clutche</h3>
+    <% var loggedin = typeof(loggedin) !=="undefined"?loggedin:true %>
+    <%if (loggedin) {%>
+        <div class="flex items-center gap-6">
+
+            <!-- Shop Icon -->
+            <a href="/shop" 
+                class="text-[1.5rem] hover:scale-110 hover:text-yellow-400 transition duration-300" 
+                title="Shop">
+                🛍️
+            </a>
+            <!-- Cart Emoji -->
+            <a href="/cart" class="text-3xl hover:scale-110 transition duration-300" title="Cart">🛒</a>
+          
+            <!-- User Emoji -->
+            <a href="/profile" class="w-8 h-8 flex items-center justify-center text-black bg-white rounded-full hover:scale-110 transition duration-300" title="Profile">
+                👤</a>
+             <!-- Logout Icon -->
+            <a href="/logout" class="group text-white text-3xl hover:text-red-400 transition duration-300">
+              <i class="ri-logout-box-r-line"></i>
+            </a>
+          
+          </div>
+          
+    <% } %>
+  </nav>

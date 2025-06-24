@@ -1,7 +1,13 @@
 <%- include('./partials/header') %>
 
+<% if (userCreated.length > 0) { %>
+  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
+    <%= userCreated %>
+  </div>
+<% } %>
+
 <% if (error.length > 0) { %>
-  <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow">
+  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow z-50">
     <%= error %>
   </div>
 <% } %>
@@ -13,13 +19,23 @@
       <h3 class="text-3xl font-bold mb-2">Welcome to <span class="font-bold">Clutche</span></h3>
       <h4 class="text-lg font-semibold mb-6">Create your account</h4>
 
-      <form autocomplete="off" action="/users/register" method="post" class="space-y-4">
+      <form autocomplete="off" action="/users/register" method="post" enctype="multipart/form-data" class="space-y-4">
         <input type="text" name="fullname" placeholder="Full Name"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         <input type="email" name="email" placeholder="Email"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         <input type="password" name="password" placeholder="Password"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        
+        <!-- Contact Field -->
+        <input type="text" name="contact" placeholder="Contact Number"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <!-- Profile Pic Upload Field -->
+        <label class="block text-sm font-medium text-bold text-xl text-white/80">Profile Picture : </label>
+        <input type="file" name="profile" accept="image/*"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition" />
+
         <input type="submit" value="Create My Account"
           class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition" />
       </form>
@@ -42,5 +58,17 @@
     </div>
   </div>
 </div>
+
+<!-- Flash Auto-Hide Script -->
+<script>
+  setTimeout(() => {
+    const flash = document.getElementById('flash-message');
+    if (flash) {
+      flash.style.opacity = '0';
+      flash.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => flash.remove(), 300);
+    }
+  }, 1000);
+</script>
 
 <%- include('./partials/footer') %>

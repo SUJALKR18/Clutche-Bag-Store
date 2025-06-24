@@ -1,0 +1,57 @@
+<%- include('./partials/header') %>
+
+<!-- Edit Profile Page -->
+<div class="min-h-screen w-full px-10 py-16 bg-[url('/images/image9.png')] bg-cover bg-center text-white font-sans space-y-12">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between border-b border-yellow-400/30 pb-6">
+    <div>
+      <h2 class="text-4xl font-bold tracking-wide text-yellow-400">Edit Profile</h2>
+      <p class="text-white/80 text-base text-bold mt-2">Update your details below.</p>
+    </div>
+    <a href="/profile" class="text-base text-bold bg-black px-5 py-2 rounded-full border border-yellow-400/40 hover:bg-yellow-400/10 transition duration-200">Back to Profile</a>
+  </div>
+
+  <!-- Edit Form -->
+  <form action="/edituser" method="POST" enctype="multipart/form-data" class="bg-black/60 backdrop-blur-md p-8 rounded-2xl shadow border border-yellow-400/20 w-full max-w-3xl mx-auto space-y-6">
+    
+    <!-- Full Name -->
+    <div>
+      <label class="block text-lg font-medium mb-1 text-yellow-400" for="fullname">Full Name</label>
+      <input type="text" id="fullname" name="fullname" value="<%= userData.fullname %>" required
+        class="w-full px-4 py-2 rounded-md bg-black/30 border border-yellow-400/20 focus:outline-none focus:ring-2 focus:ring-yellow-400/40 text-white placeholder-white/50" />
+    </div>
+
+    <!-- Email (readonly) -->
+    <div>
+      <label class="block text-lg font-medium mb-1 text-yellow-400" for="email">Email</label>
+      <input type="email" id="email" name="email" value="<%= userData.email %>" readonly
+        class="w-full px-4 py-2 rounded-md bg-black/20 border border-yellow-400/20 text-white cursor-not-allowed" />
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <label class="block text-lg font-medium mb-1 text-yellow-400" for="contact">Phone</label>
+      <input type="text" id="contact" name="contact" value="<%= userData.contact || '' %>"
+        class="w-full px-4 py-2 rounded-md bg-black/30 border border-yellow-400/20 focus:outline-none focus:ring-2 focus:ring-yellow-400/40 text-white placeholder-white/50" />
+    </div>
+
+    <!-- Profile Picture -->
+    <div>
+      <label class="block text-lg font-medium mb-1 text-yellow-400" for="image">Profile Picture</label>
+      <input type="file" id="image" name="image"
+        class="w-full px-4 py-2 rounded-md bg-black/30 border border-yellow-400/20 text-white file:bg-yellow-400 file:text-black file:rounded file:px-4 file:py-1" />
+      <p class="text-sm text-white/50 mt-1">Leave blank to keep existing image.</p>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button type="submit" class="px-6 py-2 text-lg font-medium rounded-full border border-yellow-400/30 hover:bg-yellow-400/10 transition duration-200">
+        Save Changes
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<%- include('./partials/footer') %>

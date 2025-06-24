@@ -3,7 +3,7 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 
 module.exports.registerUser = async function (req, res) {
-  const { fullname, email, password } = req.body;
+  const { fullname, email, password , contact} = req.body;
   let existUser = await userModel.findOne({ email });
   if (existUser) {
     return res.status(500).send("User Already Exists");
@@ -17,12 +17,15 @@ module.exports.registerUser = async function (req, res) {
         const user = await userModel.create({
           fullname,
           email,
+          contact,
           password: hash,
+          image: req.file ? req.file.buffer : undefined,
         });
 
         const token = generateToken(user);
         res.cookie("token", token);
-        res.send("User Created successfully");
+        req.flash("userCreated" ,"User Created successfully");
+        return res.redirect("/");
       });
     });
   } catch (err) {

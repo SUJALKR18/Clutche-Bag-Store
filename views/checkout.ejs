@@ -1,0 +1,105 @@
+<%- include('./partials/header') %>
+
+<div class="min-h-screen w-full px-10 py-20 bg-[url('/images/image.png')] bg-cover bg-center text-white font-sans space-y-12">
+
+  <!-- Checkout Header -->
+  <div class="border-b border-yellow-400/30 pb-6">
+    <h2 class="text-4xl font-bold tracking-wide text-yellow-400">Checkout</h2>
+    <p class="text-gray-400 mt-2">Enter your details and complete your purchase.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+    <!-- Billing Details -->
+    <div class="lg:col-span-2 bg-[#1e1e1e]/90 p-8 rounded-2xl shadow-md space-y-6">
+      <h3 class="text-2xl font-semibold text-yellow-300 border-b border-yellow-400/20 pb-4">Billing Information</h3>
+      <form action="/place-order" method="POST" class="space-y-6">
+
+        <div>
+          <label class="block text-gray-300 mb-1">Full Name</label>
+          <input type="text" name="fullname" required class="w-full p-3 rounded-md bg-[#2a2a2a] border border-yellow-400/10 text-white focus:outline-none focus:ring focus:ring-yellow-400">
+        </div>
+
+        <div>
+          <label class="block text-gray-300 mb-1">Email Address</label>
+          <input type="email" name="email" required class="w-full p-3 rounded-md bg-[#2a2a2a] border border-yellow-400/10 text-white focus:outline-none focus:ring focus:ring-yellow-400">
+        </div>
+
+        <div>
+          <label class="block text-gray-300 mb-1">Shipping Address</label>
+          <textarea name="address" rows="4" required class="w-full p-3 rounded-md bg-[#2a2a2a] border border-yellow-400/10 text-white focus:outline-none focus:ring focus:ring-yellow-400"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 mb-1">Phone Number</label>
+          <input type="tel" name="phone" required class="w-full p-3 rounded-md bg-[#2a2a2a] border border-yellow-400/10 text-white focus:outline-none focus:ring focus:ring-yellow-400">
+        </div>
+         <!-- Payment Option -->
+        <div>
+            <label class="block text-gray-300 mb-2">Select Payment Method</label>
+            <div class="space-y-3 text-sm text-white">
+            <label class="flex items-center gap-2">
+                <input type="radio" name="paymentMethod" value="cod" checked class="accent-yellow-400">
+                Cash on Delivery (COD)
+            </label>
+            <label class="flex items-center gap-2">
+                <input type="radio" name="paymentMethod" value="upi" class="accent-yellow-400">
+                UPI / Google Pay / PhonePe
+            </label>
+            <label class="flex items-center gap-2">
+                <input type="radio" name="paymentMethod" value="card" class="accent-yellow-400">
+                Debit / Credit Card
+            </label>
+            </div>
+        </div>
+  
+        <div class="flex justify-end">
+          <button type="submit" class="bg-yellow-400 text-black px-6 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition duration-200">
+            Place Order
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Order Summary Panel -->
+    <div class="bg-[#1e1e1e]/90 p-6 rounded-2xl shadow-md h-fit">
+      <h3 class="text-2xl font-bold text-yellow-300 border-b border-yellow-400/20 pb-4 mb-4">Order Summary</h3>
+
+      <% let subtotal = 0;
+         cartItems.forEach(item => {
+           let price = (item.discount > 0 && item.discount < item.price) ? item.discount : item.price;
+           subtotal += price;
+         });
+         let shipping = 199;
+         let total = subtotal + shipping;
+      %>
+
+      <div class="space-y-2 text-sm">
+        <% cartItems.forEach(item => {
+          let price = (item.discount > 0 && item.discount < item.price) ? item.discount : item.price;
+        %>
+          <div class="flex justify-between">
+            <span><%= item.name %></span>
+            <span>₹<%= price %></span>
+          </div>
+        <% }) %>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <span class="text-gray-400">Subtotal</span>
+        <span class="text-white">₹<%= subtotal %></span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-gray-400">Shipping</span>
+        <span class="text-white">₹<%= shipping %></span>
+      </div>
+      <div class="flex justify-between font-semibold text-yellow-300 text-lg mt-4 border-t border-yellow-400/20 pt-4">
+        <span>Total</span>
+        <span>₹<%= total %></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
