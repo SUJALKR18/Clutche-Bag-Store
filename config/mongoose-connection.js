@@ -3,7 +3,7 @@ const dbgr = require("debug")("development:mongoose");
 
 
 mongoose
-.connect(`${process.env.MONGODB_URI}/Clutche`)
+.connect(process.env.MONGODB_URI)
 .then(function(){
     dbgr("Connected");
 })
