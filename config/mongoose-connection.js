@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
-const config = require("config");
 const dbgr = require("debug")("development:mongoose");
 
 
 mongoose
-.connect(`${config.get("MONGODB_URI")}/Clutche`)
+.connect(`${process.env.MONGODB_URI}/Clutche`)
 .then(function(){
     dbgr("Connected");
 })
