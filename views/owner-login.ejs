@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clutche</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-['helvetica_now_display'] text-white">
+
+  <!-- Header/Navbar -->
+  <nav class="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between z-50">
+    <h3 class="text-3xl font-bold">Clutche</h3>
+    <a href="/" class="text-white text-sm border border-white rounded-full px-4 py-1 hover:bg-white hover:text-black transition">
+      ⬅ Back to Home
+    </a>
+  </nav>
+
+  <!-- Owner Login Section -->
+  <div class="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat pt-24" style="background-image: url('/images/image1.png');">
+    <div class="w-full max-w-md bg-black/60 backdrop-blur-sm p-10 rounded-xl shadow-lg border border-gray-600 text-white font-serif">
+      <h3 class="text-3xl font-bold mb-2 text-center">Admin Access</h3>
+      <h4 class="text-lg font-medium mb-6 text-center">Only for Clutche Owner</h4>
+
+      <form action="/owners/verify" method="post" class="space-y-4">
+        <input type="email" name="email" placeholder="Email"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <input type="password" name="password" placeholder="Password"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <input type="submit" value="Login as Owner"
+          class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition" />
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
