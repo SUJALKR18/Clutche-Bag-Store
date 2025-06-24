@@ -3,19 +3,17 @@
 <div class="min-h-screen bg-black bg-[url('/images/image.png')] bg-cover bg-center py-10 px-4 font-sans">
   <div class="max-w-3xl mx-auto bg-[#111] shadow-2xl rounded-xl overflow-hidden border border-gray-700 bg-opacity-90 backdrop-blur">
 
-    <!-- Header Section -->
     <div class="flex justify-between items-center px-8 py-6 border-b border-gray-800">
       <div>
         <h1 class="text-3xl font-bold text-yellow-400 tracking-wide">Clutche</h1>
         <p class="text-sm text-white mt-1 font-bold">Premium Bag Invoice</p>
       </div>
       <div class="text-sm text-right text-white leading-5">
-        <p class = "font-bold">Date: <%= new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
-        <p class = "font-bold">Time: <%= new Date().toLocaleTimeString('en-IN') %></p>
+        <p class="font-bold">Date: <%= new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
+        <p class="font-bold">Time: <%= new Date().toLocaleTimeString('en-IN') %></p>
       </div>
     </div>
 
-    <!-- Customer + Payment Info -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-8 py-6 border-b border-gray-800 text-white">
       <div>
         <h2 class="text-lg font-semibold text-yellow-400 mb-2">Customer Information</h2>
@@ -32,35 +30,39 @@
       </div>
     </div>
 
-    <!-- Items Table -->
     <div class="px-8 py-6">
-      <h2 class="text-lg font-semibold text-yellow-400 mb-4 text-white">Items Ordered</h2>
+      <h2 class="text-lg font-semibold text-yellow-400 mb-4">Items Ordered</h2>
       <table class="w-full border border-gray-800 text-sm text-white">
         <thead class="bg-[#1e1e1e] text-left text-yellow-300">
           <tr class="border-b border-yellow-400">
             <th class="py-3 px-4 font-semibold">#</th>
             <th class="py-3 px-4 font-semibold">Item</th>
+            <th class="py-3 px-4 font-semibold text-center">Qty</th>
             <th class="py-3 px-4 font-semibold text-right">Price (₹)</th>
+            <th class="py-3 px-4 font-semibold text-right">Total (₹)</th>
           </tr>
         </thead>
         <tbody>
           <% 
             let subtotal = 0;
             billDetails.items.forEach((item, index) => {
+              const qty = item.quantity || 1;
               const price = Number(item.discount);
-              subtotal += price;
+              const total = qty * price;
+              subtotal += total;
           %>
             <tr class="border-b border-gray-800 hover:bg-gray-900">
               <td class="py-3 px-4"><%= index + 1 %></td>
               <td class="py-3 px-4"><%= item.name %></td>
+              <td class="py-3 px-4 text-center"><%= qty %></td>
               <td class="py-3 px-4 text-right">₹<%= price.toLocaleString() %></td>
+              <td class="py-3 px-4 text-right">₹<%= total.toLocaleString() %></td>
             </tr>
           <% }) %>
         </tbody>
       </table>
     </div>
 
-    <!-- Total Summary -->
     <div class="px-8 pb-8 text-sm text-white">
       <div class="max-w-sm ml-auto space-y-2">
         <div class="flex justify-between">
@@ -78,7 +80,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <div class="bg-[#1a1a1a] px-8 py-4 text-center text-sm text-gray-400 border-t border-gray-800">
       Thank you for shopping with <span class="font-semibold text-yellow-400">Clutche</span>!
     </div>

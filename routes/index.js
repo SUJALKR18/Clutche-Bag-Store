@@ -50,30 +50,32 @@ router.get("/logout" , isLoggedIn , function(req, res){
     res.redirect("/");
 })
 
-router.get("/addtocart/:productid" , isLoggedIn ,async function(req ,res){
-    try{
-        let user = await userModel.findOne({email : req.user.email});
+router.get("/addtocart/:productid", isLoggedIn, async function (req, res) {
+    try {
+        let user = await userModel.findOne({ email: req.user.email });
         let productId = req.params.productid;
-        if (!user.cart.includes(productId)) {
-          user.cart.push(productId);
-          await user.save();
-          req.flash("added", "Added to cart successfully!");
-          return res.redirect("/shop");
+        let existingItem = user.cart.find((item) => item.product.toString() === productId);
+        if (existingItem) {
+            existingItem.quantity += 1;
+            req.flash("added", "Increased quantity in cart!");
         } 
         else {
-          req.flash("error", "Product is already in your cart.");
-          return res.redirect("/shop");
+            user.cart.push({ product: productId, quantity: 1 });
+            req.flash("added", "Added to cart successfully!");
         }
-    }
-    catch(err){
+        await user.save();
+        return res.redirect("/shop");
+    } 
+    catch (err) {
         return res.status(500).send(err.message);
     }
-})
+});
+  
 
-router.get("/cart" , isLoggedIn ,async function(req ,res){
+router.get("/shop/cart" , isLoggedIn ,async function(req ,res){
     try{
         let removed = req.flash("removed")
-        let user = await userModel.findOne({email : req.user.email}).populate('cart');
+        let user = await userModel.findOne({email : req.user.email}).populate('cart.product');
         res.render("cart", {
           cartItems: user.cart,
           userName: user.fullname,
@@ -88,32 +90,44 @@ router.get("/cart" , isLoggedIn ,async function(req ,res){
 router.post("/remove-from-cart/:id" , isLoggedIn ,async function(req,res){
     let productId = req.params.id;
     let user = await userModel.findOne({email : req.user.email});
-    const index = user.cart.indexOf(productId);
-    if (index !== -1) {
-      user.cart.splice(index, 1);
-      await user.save();
-      req.flash("removed", "Product removed successfully");
-    }
-    return res.redirect("/cart");
+    user.cart = user.cart.filter(item => item.product.toString() !== productId);
+    await user.save();
+    req.flash("removed", "Product removed successfully");
+    return res.redirect("/shop/cart");
 });
 
-router.post("/checkout" , isLoggedIn , async function(req ,res){
-    try{
-        let user = await userModel.findOne({email : req.user.email}).populate('cart');
-        res.render("checkout" , {
-            cartItems : user.cart,
-            fullname : user.fullname
-        })
+router.post("/checkout", isLoggedIn, async function (req, res) {
+  try {
+        const user = await userModel
+        .findOne({ email: req.user.email })
+        .populate("cart.product");
+
+        const cartItems = user.cart.map((item) => {
+        const product = item.product;
+        return {
+            name: product.name,
+            price: product.price,
+            discount: product.discount,
+            quantity: item.quantity,
+        };
+        });
+
+        res.render("checkout", {
+        cartItems,
+        fullname: user.fullname,
+        email: user.email,
+        });
+    } 
+    catch (err) {
+        res.status(500).send(err.message);
     }
-    catch(err){
-        res.status(500).send(err.messgae);
-    }
-})
+});
+  
 
 router.post("/place-order", isLoggedIn, async function (req, res) {
-    let user = await userModel
+    const user = await userModel
         .findOne({ email: req.user.email })
-        .populate("cart");
+        .populate("cart.product");
 
     const billDetails = {
         fullname: req.body.fullname,
@@ -122,9 +136,10 @@ router.post("/place-order", isLoggedIn, async function (req, res) {
         address: req.body.address,
         paymentMethod: req.body.paymentMethod,
         items: user.cart.map((item) => ({
-            name: item.name,
-            price: item.price,
-            discount: item.discount,
+            name: item.product.name,
+            price: item.product.price,
+            discount: item.product.discount,
+            quantity: item.quantity,
         })),
         date: new Date(),
         orderId: "CLT-" + Date.now().toString().slice(-6),
@@ -136,10 +151,35 @@ router.post("/place-order", isLoggedIn, async function (req, res) {
     await user.save();
 
     req.flash("order", "Order placed Successfully");
-    let order = req.flash("order");
+    const order = req.flash("order");
 
     res.render("bill", { billDetails, order });
 });
+  
+
+router.post("/increase-qty/:id", isLoggedIn, async (req, res) => {
+    const user = await userModel.findOne({ email: req.user.email });
+    const item = user.cart.find((i) => i.product.toString() === req.params.id);
+    if (item) item.quantity += 1;
+    await user.save();
+    res.redirect("/shop/cart");
+});
+
+router.post("/decrease-qty/:id", isLoggedIn, async (req, res) => {
+    const user = await userModel.findOne({ email: req.user.email });
+    const item = user.cart.find((i) => i.product.toString() === req.params.id);
+    if (item) {
+        item.quantity -= 1;
+        if (item.quantity <= 0) {
+            user.cart = user.cart.filter(
+                (i) => i.product.toString() !== req.params.id
+            );
+        }
+    }
+    await user.save();
+    res.redirect("/shop/cart");
+});
+  
     
     
 module.exports = router;

@@ -50,43 +50,55 @@
   </div>
 
   <!-- Order History -->
-  <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow border border-yellow-400/20">
-    <h4 class="text-2xl font-semibold mb-6 text-yellow-400">Order History</h4>
+<div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow border border-yellow-400/20">
+  <h4 class="text-2xl font-semibold mb-6 text-yellow-400">Order History</h4>
 
-    <% if (userData.orders.length > 0) { %>
-      <div class="space-y-8 text-white/90 text-base">
-        <% userData.orders.forEach((order, index) => { %>
-          <div class="border border-white/10 bg-white/10 backdrop-blur-sm rounded-xl p-4 shadow-md">
-            <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
-              <div>
-                <p class="font-semibold text-white text-lg">Order ID: <%= order.orderId %></p>
-                <p class="text-white/50 text-sm">Date: <%= new Date(order.date).toLocaleString() %></p>
-              </div>
-              <span class="px-3 py-1 bg-green-600/80 rounded-full text-sm font-medium text-white">
-                <%= order.status %>
-              </span>
+  <% if (userData.orders.length > 0) { %>
+    <div class="space-y-8 text-white/90 text-base">
+      <% userData.orders.forEach((order) => { %>
+        <div class="border border-white/10 bg-white/10 backdrop-blur-sm rounded-xl p-4 shadow-md">
+          <!-- Header -->
+          <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+            <div>
+              <p class="font-semibold text-white text-lg">Order ID: <%= order.orderId %></p>
+              <p class="text-white/50 text-sm">Date: <%= new Date(order.date).toLocaleString() %></p>
             </div>
-
-            <% order.items.forEach((item, i) => { %>
-              <div class="flex justify-between border-b border-white/5 py-2">
-                <span><%= i + 1 %>. <%= item.name %></span>
-                <span>₹<%= item.discount %></span>
-              </div>
-            <% }) %>
-
-            <div class="flex justify-between mt-3 pt-3 border-t border-white/10 font-semibold">
-              <span>Total</span>
-              <span>
-                ₹<%= order.items.reduce((sum, item) => sum + Number(item.discount), 199) %>
-              </span>
-            </div>
+            <span class="px-3 py-1 bg-green-600/80 rounded-full text-sm font-medium text-white">
+              <%= order.status %>
+            </span>
           </div>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <div class="text-white/60 text-lg py-8 text-center">You haven’t placed any orders yet.</div>
-    <% } %>
-  </div>
+
+          <!-- Column Headings -->
+          <div class="grid grid-cols-3 font-semibold border-b border-yellow-400/10 pb-2 text-yellow-300">
+            <span>Product</span>
+            <span class="text-center">Quantity</span>
+            <span class="text-right">Price</span>
+          </div>
+
+          <!-- Products -->
+          <% order.items.forEach((item) => { %>
+            <div class="grid grid-cols-3 border-b border-white/5 py-2">
+              <span><%= item.name %></span>
+              <span class="text-center"><%= item.quantity %></span>
+              <span class="text-right">₹<%= item.discount %></span>
+            </div>
+          <% }) %>
+
+          <!-- Total -->
+          <div class="flex justify-between mt-3 pt-3 border-t border-white/10 font-semibold">
+            <span>Total</span>
+            <span>
+              ₹<%= order.items.reduce((sum, item) => sum + (item.discount * item.quantity), 0) + 199 %>
+            </span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="text-white/60 text-lg py-8 text-center">You haven’t placed any orders yet.</div>
+  <% } %>
+</div>
+
 
 </div>
 
