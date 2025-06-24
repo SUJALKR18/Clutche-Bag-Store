@@ -1,49 +1,31 @@
 <%- include('./partials/header') %>
-<!-- Main Content -->
+
 <% if (added.length > 0) { %>
   <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
     <%= added %>
   </div>
 <% } %>
 <% if (error.length > 0) { %>
-  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
+  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow z-50">
     <%= error %>
   </div>
 <% } %>
 
 <div class="w-full min-h-screen flex px-10 py-20 bg-[url('/images/image8.png')] bg-cover bg-center text-white font-sans">
-  
+
   <!-- Sidebar -->
-  <div class="w-[22%] h-full pr-8 border-r border-white/10 space-y-10">
-    <!-- Sort Options -->
-    <div class="bg-black/20 backdrop-blur-xl p-4 rounded-2xl shadow-md border border-white/10">
-      <h3 class="mb-2 font-semibold text-lg uppercase tracking-wide text-white">Sort by</h3>
-      <form action="/shop">
-        <select class="bg-black/30 text-white border border-white/20 rounded px-3 py-2 w-full shadow-sm focus:outline-none">
-          <option value="popular">Popular</option>
-          <option value="newest">Newest</option>
+  <div class="w-[22%] min-h-full pr-8 space-y-10">
+    <div class="bg-white/5 backdrop-blur-xl p-6 rounded-2xl shadow-md border border-white/10 min-h-[500px]">
+      <h3 class="text-xl font-bold text-yellow-400 uppercase tracking-wide border-b border-yellow-400/20 pb-3">Filters</h3>
+      <form action="/shop" method="GET" class="mt-4 space-y-3">
+        <select name="sort" class="bg-black/30 text-white border border-white/20 rounded px-3 py-2 w-full shadow-sm focus:outline-none">
+          <option value="popular" <%= sort === 'popular' ? 'selected' : '' %>>Popularity</option>
+          <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest First</option>
+          <option value="priceLow" <%= sort === 'priceLow' ? 'selected' : '' %>>Price: Low to High</option>
+          <option value="priceHigh" <%= sort === 'priceHigh' ? 'selected' : '' %>>Price: High to Low</option>
         </select>
+        <button type="submit" class="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:bg-yellow-300 transition">Apply</button>
       </form>
-    </div>
-
-    <!-- Categories -->
-    <div class="bg-black/20 backdrop-blur-xl p-4 rounded-2xl shadow-md border border-white/10">
-      <h3 class="mb-3 font-semibold text-lg uppercase tracking-wide text-white">Categories</h3>
-      <div class="flex flex-wrap gap-2">
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">New Collection</a>
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">All Products</a>
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">Discounted</a>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="bg-black/20 backdrop-blur-xl p-4 rounded-2xl shadow-md border border-white/10">
-      <h3 class="mb-3 font-semibold text-lg uppercase tracking-wide text-white">Filter by</h3>
-      <div class="flex flex-wrap gap-2">
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">Availability</a>
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">Discount</a>
-        <a href="#" class="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition">Best Seller</a>
-      </div>
     </div>
   </div>
 
@@ -51,26 +33,21 @@
   <div class="w-[78%] pl-8">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       <% products.forEach(function(product) { %>
-        <div class="relative group rounded-2xl border border-white/10 bg-[<%=product.bgcolor %>]/30 backdrop-blur-xl text-white shadow-md transition hover:shadow-xl hover:border-white/30 hover:scale-[1.02] overflow-hidden">
-      
-          <!-- Product Image -->
+        <div class="relative group rounded-2xl border border-white/10 bg-[<%= product.bgcolor %>]/30 backdrop-blur-xl text-white shadow-md transition hover:shadow-xl hover:border-white/30 hover:scale-[1.02] overflow-hidden">
           <div class="h-52 w-full flex items-center justify-center rounded-t-2xl overflow-hidden bg-[<%= product.bgcolor %>]">
             <img class="h-[11rem] object-contain transition duration-500 group-hover:scale-110" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
           </div>
-      
-          <!-- Price + Name Panel -->
           <div class="flex justify-between items-center px-4 py-4 bg-black text-white rounded-b-2xl">
             <div>
               <h3 class="font-semibold text-base sm:text-lg tracking-wide leading-tight"><%= product.name %></h3>
               <h4 class="text-sm sm:text-base mt-1 font-medium">₹ <%= product.price %></h4>
             </div>
-            <a class="w-9 h-9 flex items-center justify-center rounded-full bg-white text-black shadow-md hover:shadow-lg hover:scale-110 transition" href="/addtoCart/<%= product._id%>">
+            <a class="w-9 h-9 flex items-center justify-center rounded-full bg-white text-black shadow-md hover:shadow-lg hover:scale-110 transition" href="/addtoCart/<%= product._id %>">
               <i class="ri-add-line text-lg"></i>
             </a>
           </div>
-      
         </div>
-      <% }) %>          
+      <% }) %>
     </div>
   </div>
 </div>
@@ -81,5 +58,5 @@
     if (flash) flash.remove();
   }, 1000);
 </script>
-</body>
-</html>
+
+<%- include('./partials/footer') %>

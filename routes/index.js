@@ -12,12 +12,33 @@ router.get("/" , function(req ,res){
     res.render("index" , {userCreated , error , loggedin : false});
 });
 
-router.get("/shop" , isLoggedIn , async function(req ,res){
-    let added = req.flash("added");
-    let error = req.flash("error");
-    let products = await productModel.find()
-    res.render("shop" , { products , added , error});
-})
+router.get("/shop", isLoggedIn, async function (req, res) {
+    try {
+        let added = req.flash("added");
+        let error = req.flash("error");
+        let sortBy = req.query.sort || "popular";
+
+        let products = await productModel.find();
+
+        if (sortBy === "priceLow") {
+        products.sort((a, b) => a.price - b.price);
+        } else if (sortBy === "priceHigh") {
+        products.sort((a, b) => b.price - a.price);
+        } else if (sortBy === "newest") {
+        products = products.reverse();
+        }
+
+        res.render("shop", {
+        products,
+        added,
+        error,
+        sort: sortBy,
+        });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+  
 
 router.get("/profile" , isLoggedIn , function(req ,res){
     let userData = req.user;
