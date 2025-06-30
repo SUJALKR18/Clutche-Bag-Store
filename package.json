@@ -14,7 +14,6 @@
   "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "chrome-aws-lambda": "^10.1.0",
     "config": "^4.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.7",
@@ -24,8 +23,6 @@
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
-    "multer": "^2.0.1",
-    "puppeteer": "^10.4.0",
-    "puppeteer-core": "^10.4.0"
+    "multer": "^2.0.1"
   }
 }
