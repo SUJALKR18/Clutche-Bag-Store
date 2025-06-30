@@ -4,8 +4,7 @@ const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const productModel = require('../models/product-model');
 const userModel = require('../models/user-model');
 const router = express.Router();
-const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
@@ -236,25 +235,18 @@ router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
       pdfMode: true,
     });
 
-    let browser;
+    // Import puppeteer here
+    const puppeteer = require("puppeteer");
 
-    // 🧠 Detect environment (Render.com has 'RENDER' env var set)
-    const isRender = process.env.RENDER;
-
-    if (isRender) {
-      browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-      });
-    } else {
-      const puppeteerLocal = require("puppeteer");
-      browser = await puppeteerLocal.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
-    }
+    const browser = await puppeteer.launch({
+      headless: true, // Use 'new' for new headless mode or 'old' for old
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-gpu", // Often helpful in container environments
+        "--disable-dev-shm-usage", // Important for limited shared memory environments
+      ],
+    });
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
@@ -281,6 +273,5 @@ router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
       .send("Something went wrong while generating invoice.");
   }
 });
-  
 
 module.exports = router;
