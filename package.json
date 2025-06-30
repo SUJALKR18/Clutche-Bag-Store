@@ -25,6 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "multer": "^2.0.1",
-    "puppeteer-core": "^24.11.1"
+    "puppeteer": "^10.4.0",
+    "puppeteer-core": "^10.4.0"
   }
 }
