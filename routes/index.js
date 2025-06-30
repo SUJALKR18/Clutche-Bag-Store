@@ -4,7 +4,8 @@ const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const productModel = require('../models/product-model');
 const userModel = require('../models/user-model');
 const router = express.Router();
-const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 const ejs = require("ejs");
@@ -221,36 +222,33 @@ router.get("/invoice/:orderId" , isLoggedIn , function(req ,res){
 })
 
 
-router.get("/download-invoice/:orderId", isLoggedIn, async function (req, res) {
+router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
   try {
     const user = req.user;
     const orderId = req.params.orderId;
 
     const billDetails = user.orders.find((order) => order.orderId === orderId);
-    if (!billDetails) {
-      return res.status(404).send("Order not found");
-    }
+    if (!billDetails) return res.status(404).send("Order not found");
 
-    const ejs = require("ejs");
-    const path = require("path");
-    const puppeteer = require("puppeteer");
-
+    // Step 1: Render EJS template to HTML
     const invoicePath = path.join(__dirname, "../views/invoice.ejs");
     const html = await ejs.renderFile(invoicePath, {
       billDetails,
-      pdfMode: true, // optional flag if you use conditional formatting
+      pdfMode: true, // optional flag if you want different styles
     });
 
-    // ✅ Use the updated launch config here:
+    // Step 2: Launch Puppeteer with chrome-aws-lambda
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: puppeteer.executablePath(), // 👈 Force Chrome path
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: (await chromium.executablePath) || undefined,
+      headless: chromium.headless,
     });
-      
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
 
+    // Step 3: Generate PDF
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -259,6 +257,7 @@ router.get("/download-invoice/:orderId", isLoggedIn, async function (req, res) {
 
     await browser.close();
 
+    // Step 4: Send the PDF
     res.set({
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename=Clutche_Invoice_${orderId}.pdf`,
@@ -270,9 +269,10 @@ router.get("/download-invoice/:orderId", isLoggedIn, async function (req, res) {
     console.error("PDF generation failed:", err);
     return res
       .status(500)
-      .send("Something went wrong while generating the invoice.");
+      .send("Something went wrong while generating invoice.");
   }
 });
+  
   
 
 module.exports = router;
