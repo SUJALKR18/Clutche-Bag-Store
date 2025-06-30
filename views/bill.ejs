@@ -4,7 +4,7 @@
   <div class="max-w-4xl mt-10 mx-auto rounded-xl shadow-2xl border border-gray-700 bg-[#111]/90 backdrop-blur-md px-8 py-6 text-white">
 
     <!-- Header -->
-    <div class="flex justify-between items-center border-b border-gray-800 pb-6">
+    <div class="flex justify-between items-center border-b border-gray-800 pb-6 flex-wrap gap-4">
       <div>
         <h1 class="text-3xl font-bold text-yellow-400 tracking-wide">Clutche</h1>
         <p class="text-sm mt-1 font-bold">Premium Bag Invoice</p>
@@ -35,34 +35,36 @@
     <!-- Items -->
     <div class="py-6">
       <h2 class="text-lg font-semibold text-yellow-400 mb-4">Items Ordered</h2>
-      <table class="w-full border border-gray-800 text-sm">
-        <thead class="bg-[#1e1e1e] text-left text-yellow-300">
-          <tr class="border-b border-yellow-400">
-            <th class="py-3 px-4">#</th>
-            <th class="py-3 px-4">Item</th>
-            <th class="py-3 px-4 text-center">Qty</th>
-            <th class="py-3 px-4 text-right">Price (₹)</th>
-            <th class="py-3 px-4 text-right">Total (₹)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% let subtotal = 0;
-             billDetails.items.forEach((item, index) => {
-               const qty = item.quantity || 1;
-               const price = Number(item.discount > 0 && item.discount < item.price ? item.discount : item.price);
-               const total = qty * price;
-               subtotal += total;
-          %>
-          <tr class="border-b border-gray-800 hover:bg-gray-900">
-            <td class="py-3 px-4"><%= index + 1 %></td>
-            <td class="py-3 px-4"><%= item.name %></td>
-            <td class="py-3 px-4 text-center"><%= qty %></td>
-            <td class="py-3 px-4 text-right">₹<%= price.toLocaleString() %></td>
-            <td class="py-3 px-4 text-right">₹<%= total.toLocaleString() %></td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[600px] border border-gray-800 text-sm">
+          <thead class="bg-[#1e1e1e] text-left text-yellow-300">
+            <tr class="border-b border-yellow-400">
+              <th class="py-3 px-4">#</th>
+              <th class="py-3 px-4">Item</th>
+              <th class="py-3 px-4 text-center">Qty</th>
+              <th class="py-3 px-4 text-right">Price (₹)</th>
+              <th class="py-3 px-4 text-right">Total (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let subtotal = 0;
+               billDetails.items.forEach((item, index) => {
+                 const qty = item.quantity || 1;
+                 const price = Number(item.discount > 0 && item.discount < item.price ? item.discount : item.price);
+                 const total = qty * price;
+                 subtotal += total;
+            %>
+            <tr class="border-b border-gray-800 hover:bg-gray-900">
+              <td class="py-3 px-4"><%= index + 1 %></td>
+              <td class="py-3 px-4"><%= item.name %></td>
+              <td class="py-3 px-4 text-center"><%= qty %></td>
+              <td class="py-3 px-4 text-right">₹<%= price.toLocaleString() %></td>
+              <td class="py-3 px-4 text-right">₹<%= total.toLocaleString() %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Summary -->
@@ -89,13 +91,14 @@
     </div>
   </div>
 
-<div class="text-center mt-8">
-  <a href="/download-invoice/<%= billDetails.orderId %>" target="_blank">
-    <button class="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
-      Download Invoice PDF
-    </button>
-  </a>
-</div> 
+  <!-- PDF Download -->
+  <div class="text-center mt-8">
+    <a href="/download-invoice/<%= billDetails.orderId %>" target="_blank">
+      <button class="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
+        Download Invoice PDF
+      </button>
+    </a>
+  </div>
 
   <!-- Back to Home Button -->
   <div class="text-center mt-4">
