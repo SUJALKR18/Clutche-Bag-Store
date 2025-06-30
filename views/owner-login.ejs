@@ -1,41 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clutche</title>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<%- include('./partials/header') %>
 
-<body class="font-['helvetica_now_display'] text-white">
+<body class="flex flex-col min-h-screen">
 
-  <!-- Header/Navbar -->
-  <nav class="w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between z-50">
-    <h3 class="text-3xl font-bold">Clutche</h3>
-    <a href="/" class="text-white text-sm border border-white rounded-full px-4 py-1 hover:bg-white hover:text-black transition">
-      ⬅ Back to Home
+  <!-- Navbar -->
+  <div class="absolute top-4 right-6 z-50">
+    <a href="/owners/login" class="bg-white text-black font-semibold px-4 py-2 rounded-md shadow hover:bg-gray-200 transition">
+      Login as Owner
     </a>
-  </nav>
+  </div>
 
-  <!-- Owner Login Section -->
-  <div class="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat pt-24" style="background-image: url('/images/image1.png');">
-    <div class="w-full max-w-md bg-black/60 backdrop-blur-sm p-10 rounded-xl shadow-lg border border-gray-600 text-white font-serif">
-      <h3 class="text-3xl font-bold mb-2 text-center">Admin Access</h3>
-      <h4 class="text-lg font-medium mb-6 text-center">Only for Clutche Owner</h4>
 
+  <main
+    class="flex-grow flex flex-col items-center px-4 sm:px-8 py-10 sm:py-14 text-white font-serif bg-[url('/images/image.png')] lg:bg-[url('/images/image1.png')] lg:bg-cover lg:bg-center lg:bg-no-repeat pt-20"
+  >
+    <div class="bg-black/80 px-6 py-4 rounded-lg shadow mb-6 sm:mb-5 mt-10 sm:mt-4 border border-white w-full max-w-lg text-center">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white">
+        Admin Access
+      </h1>
+      <p class="text-white/80 mt-1">Only for Clutche Owner</p>
+    </div>
+
+    <div class="w-full max-w-lg bg-black/70 backdrop-blur-sm p-6 sm:p-10 rounded-xl shadow-lg border border-white sm:border-gray-700 mb-8">
       <form action="/owners/verify" method="post" class="space-y-4">
-        <input type="email" name="email" placeholder="Email"
-          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          autocomplete="email"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
 
-        <input type="password" name="password" placeholder="Password"
-          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
 
-        <input type="submit" value="Login as Owner"
-          class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition" />
+        <input
+          type="submit"
+          value="Login as Owner"
+          class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition"
+        />
       </form>
     </div>
-  </div>
+  </main>
+
+  <%- include('./partials/footer') %>
 
 </body>
 </html>

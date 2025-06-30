@@ -8,43 +8,48 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="font-['helvetica_now_display'] bg-black text-white ">
+<body class="font-['helvetica_now_display'] text-white bg-[#000000]">
 
-  <!-- Header/Navbar -->
-  <nav class="w-full fixed top-0 left-0 px-4 py-1 flex flex-wrap items-center justify-between z-50">
-    <h3 class="text-2xl sm:text-3xl font-bold">Clutche</h3>
+  <!-- Navbar -->
+  <nav class="w-full fixed top-0 left-0 z-50 px-2 py-3 bg-[#000000] mb-20">
+    <div class="flex items-center justify-between">
 
-    <% var loggedin = typeof(loggedin) !== "undefined" ? loggedin : true %>
-    <% if (loggedin) { %>
-    <div class="flex items-center gap-4 sm:gap-6 mt-2 sm:mt-0">
+      <!-- Brand -->
+      <h3 class="text-lg sm:text-3xl font-bold text-white">Clutche</h3>
 
-      <!-- Add Products Link -->
-      <a href="/owners/admin" class="flex flex-col items-center text-white hover:text-green-400 transition duration-300 text-xs sm:text-sm">
-        <span class="text-xl sm:text-2xl font-bold">+</span>
-        <span>Add Products</span>
-      </a>
+      <% var loggedin = typeof(loggedin) !== "undefined" ? loggedin : true %>
+      <% if (loggedin) { %>
+      <!-- Icons Row -->
+      <div class="flex items-center space-x-3 sm:space-x-6 text-sm sm:text-base">
 
-      <!-- Shop Icon -->
-      <a href="/shop" class="text-xl sm:text-2xl hover:scale-110 hover:text-yellow-400 transition" title="Shop">
-        🛍️
-      </a>
+        <!-- Add Products -->
+        <a href="/owners/admin" class="flex flex-col items-center text-white hover:text-green-400 transition text-xs sm:text-sm">
+          <span class="text-lg sm:text-2xl font-bold">+</span>
+        </a>
 
-      <!-- Cart Icon -->
-      <a href="/shop/cart" class="text-xl sm:text-2xl hover:scale-110 transition" title="Cart">
-        🛒
-      </a>
+        <!-- Shop Icon -->
+        <a href="/shop" class="text-lg sm:text-2xl hover:scale-110 hover:text-yellow-400 transition" title="Shop">
+          🛍️
+        </a>
 
-      <!-- Profile Icon -->
-      <a href="/profile" class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-black bg-white rounded-full hover:scale-110 transition" title="Profile">
-        👤
-      </a>
+        <!-- Cart Icon -->
+        <a href="/shop/cart" class="text-lg sm:text-2xl hover:scale-110 transition" title="Cart">
+          🛒
+        </a>
 
-      <!-- Logout Icon -->
-      <a href="/logout" class="text-xl sm:text-2xl text-white hover:text-red-400 transition" title="Logout">
-        <i class="ri-logout-box-r-line"></i>
-      </a>
+        <!-- Profile Icon -->
+        <a href="/profile" class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-black bg-white rounded-full hover:scale-110 transition" title="Profile">
+          👤
+        </a>
+
+        <!-- Logout Icon -->
+        <a href="/logout" class="text-lg sm:text-2xl text-white hover:text-red-400 transition" title="Logout">
+          <i class="ri-logout-box-r-line"></i>
+        </a>
+      </div>
+      <% } %>
+
     </div>
-    <% } %>
   </nav>
 
 </body>

@@ -1,69 +1,72 @@
 <%- include('./partials/header') %>
 
-<div class="min-h-screen bg-black bg-[url('/images/image.png')] bg-cover bg-center py-10 px-4 font-sans mt-5">
-  <div class="max-w-3xl mx-auto bg-[#111] shadow-2xl rounded-xl overflow-hidden border border-gray-700 bg-opacity-90 backdrop-blur">
+<div class="min-h-screen bg-black bg-cover bg-center py-10 px-4 font-sans mt-5 bg-fixed bg-no-repeat bg-[url('/images/image.png')]">
+  <div class="max-w-4xl mt-10 mx-auto rounded-xl shadow-2xl border border-gray-700 bg-[#111]/90 backdrop-blur-md px-8 py-6 text-white">
 
-    <div class="flex justify-between items-center px-8 py-6 border-b border-gray-800">
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b border-gray-800 pb-6">
       <div>
         <h1 class="text-3xl font-bold text-yellow-400 tracking-wide">Clutche</h1>
-        <p class="text-sm text-white mt-1 font-bold">Premium Bag Invoice</p>
+        <p class="text-sm mt-1 font-bold">Premium Bag Invoice</p>
       </div>
-      <div class="text-sm text-right text-white leading-5">
-        <p class="font-bold">Date: <%= new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
-        <p class="font-bold">Time: <%= new Date().toLocaleTimeString('en-IN') %></p>
+      <div class="text-sm text-right leading-5">
+        <p class="font-bold">Date: <%= new Date(billDetails.date).toLocaleDateString('en-IN') %></p>
+        <p class="font-bold">Time: <%= new Date(billDetails.date).toLocaleTimeString('en-IN') %></p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-8 py-6 border-b border-gray-800 text-white">
+    <!-- Customer + Payment -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-gray-800 py-6">
       <div>
-        <h2 class="text-lg font-semibold text-yellow-400 mb-2">Customer Information</h2>
+        <h2 class="text-lg font-semibold text-yellow-400 mb-2">Customer Info</h2>
         <p><strong>Name:</strong> <%= billDetails.fullname %></p>
         <p><strong>Phone:</strong> <%= billDetails.phone %></p>
         <p><strong>Email:</strong> <%= billDetails.email %></p>
         <p><strong>Address:</strong> <%= billDetails.address %></p>
       </div>
       <div>
-        <h2 class="text-lg font-semibold text-yellow-400 mb-2">Payment Details</h2>
+        <h2 class="text-lg font-semibold text-yellow-400 mb-2">Payment Info</h2>
         <p><strong>Method:</strong> <%= billDetails.paymentMethod.toUpperCase() %></p>
         <p><strong>Status:</strong> Paid</p>
-        <p><strong>Order ID:</strong> CLT-<%= Date.now().toString().slice(-6) %></p>
+        <p><strong>Order ID:</strong> <%= billDetails.orderId %></p>
       </div>
     </div>
 
-    <div class="px-8 py-6">
+    <!-- Items -->
+    <div class="py-6">
       <h2 class="text-lg font-semibold text-yellow-400 mb-4">Items Ordered</h2>
-      <table class="w-full border border-gray-800 text-sm text-white">
+      <table class="w-full border border-gray-800 text-sm">
         <thead class="bg-[#1e1e1e] text-left text-yellow-300">
           <tr class="border-b border-yellow-400">
-            <th class="py-3 px-4 font-semibold">#</th>
-            <th class="py-3 px-4 font-semibold">Item</th>
-            <th class="py-3 px-4 font-semibold text-center">Qty</th>
-            <th class="py-3 px-4 font-semibold text-right">Price (₹)</th>
-            <th class="py-3 px-4 font-semibold text-right">Total (₹)</th>
+            <th class="py-3 px-4">#</th>
+            <th class="py-3 px-4">Item</th>
+            <th class="py-3 px-4 text-center">Qty</th>
+            <th class="py-3 px-4 text-right">Price (₹)</th>
+            <th class="py-3 px-4 text-right">Total (₹)</th>
           </tr>
         </thead>
         <tbody>
-          <% 
-            let subtotal = 0;
-            billDetails.items.forEach((item, index) => {
-              const qty = item.quantity || 1;
-              const price = Number(item.discount);
-              const total = qty * price;
-              subtotal += total;
+          <% let subtotal = 0;
+             billDetails.items.forEach((item, index) => {
+               const qty = item.quantity || 1;
+               const price = Number(item.discount > 0 && item.discount < item.price ? item.discount : item.price);
+               const total = qty * price;
+               subtotal += total;
           %>
-            <tr class="border-b border-gray-800 hover:bg-gray-900">
-              <td class="py-3 px-4"><%= index + 1 %></td>
-              <td class="py-3 px-4"><%= item.name %></td>
-              <td class="py-3 px-4 text-center"><%= qty %></td>
-              <td class="py-3 px-4 text-right">₹<%= price.toLocaleString() %></td>
-              <td class="py-3 px-4 text-right">₹<%= total.toLocaleString() %></td>
-            </tr>
+          <tr class="border-b border-gray-800 hover:bg-gray-900">
+            <td class="py-3 px-4"><%= index + 1 %></td>
+            <td class="py-3 px-4"><%= item.name %></td>
+            <td class="py-3 px-4 text-center"><%= qty %></td>
+            <td class="py-3 px-4 text-right">₹<%= price.toLocaleString() %></td>
+            <td class="py-3 px-4 text-right">₹<%= total.toLocaleString() %></td>
+          </tr>
           <% }) %>
         </tbody>
       </table>
     </div>
 
-    <div class="px-8 pb-8 text-sm text-white">
+    <!-- Summary -->
+    <div class="pb-8 text-sm">
       <div class="max-w-sm ml-auto space-y-2">
         <div class="flex justify-between">
           <span>Subtotal</span>
@@ -80,10 +83,26 @@
       </div>
     </div>
 
-    <div class="bg-[#1a1a1a] px-8 py-4 text-center text-sm text-gray-400 border-t border-gray-800">
+    <!-- Footer -->
+    <div class="bg-[#1a1a1a] px-8 py-4 text-center text-sm text-gray-400 border-t border-gray-800 rounded-b-xl">
       Thank you for shopping with <span class="font-semibold text-yellow-400">Clutche</span>!
     </div>
+  </div>
 
+  <!-- Download Button -->
+<div class="text-center mt-8">
+  <a href="/download-invoice/<%= billDetails.orderId %>" target="_blank">
+    <button class="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
+      Download Invoice PDF
+    </button>
+  </a>
+</div> 
+
+  <!-- Back to Home Button -->
+  <div class="text-center mt-4">
+    <a href="/" class="text-blue-400 hover:underline">
+      Back to Home
+    </a>
   </div>
 </div>
 

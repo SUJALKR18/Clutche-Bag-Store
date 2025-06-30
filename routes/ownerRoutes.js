@@ -39,6 +39,6 @@ router.get("/admin", isOwner, async function (req, res) {
   
 
 router.get("/login" , function(req ,res){
-    res.render("owner-login");
+    res.render("owner-login" , {loggedin: false });
 })
 module.exports = router;

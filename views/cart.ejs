@@ -1,21 +1,23 @@
 <%- include('./partials/header') %>
 
 <% if (removed.length > 0) { %>
-  <div id="flash-message" class="mt-5 absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500 z-50">
-    <span class="inline-block mt-1 mb-1 text-white"><%= removed %></span>
+  <div id="flash-message" class="mt-5 fixed top-5 left-1/2 -translate-x-1/2 p-3 rounded-md bg-blue-500 z-50">
+    <span class="inline-block text-white"><%= removed %></span>
   </div>
 <% } %>
 
-<div class="min-h-screen w-full px-10 py-16 bg-[url('/images/image.png')] bg-cover bg-center text-white font-sans space-y-12">
+<div class="min-h-screen w-full px-4 sm:px-10 py-16 bg-[url('/images/image.png')] lg:bg-cover lg:bg-center text-white font-sans space-y-12">
 
   <!-- Cart Header -->
-  <div class="border-b border-yellow-400/30 pb-6">
-    <h2 class="text-4xl font-bold tracking-wide text-yellow-400">Your Cart</h2>
-    <p class="text-gray-400 mt-2">Review your selected bags before checking out.</p>
-  </div>
+  <div class="border-b border-yellow-400/30 pb-6 max-w-7xl mx-auto px-2 mt-10 sm:px-0">
+    <!-- Mobile: black bg box with padding and rounded -->
+    <div class=" p-4 rounded-xl shadow-md">
+      <h2 class="text-4xl font-bold tracking-wide text-yellow-400">Your Cart</h2>
+      <p class="text-gray-200 mt-2 max-w-md">Review your selected bags before checking out.</p>
+    </div>
 
   <!-- Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
 
     <!-- Cart Items -->
     <div class="lg:col-span-2 space-y-8">
@@ -26,15 +28,15 @@
           ? item.product.discount
           : item.product.price;
       %>
-        <div class="flex items-center justify-between p-6 rounded-2xl shadow-md <%= item.product.panelcolor %>">
-          <div class="flex items-center gap-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl shadow-md <%= item.product.panelcolor %> bg-black/30 backdrop-blur-md">
+          <div class="flex items-center gap-6 w-full sm:w-auto">
             <img 
               src="data:image/png;base64,<%= item.product.image.toString('base64') %>" 
               alt="<%= item.product.name %>" 
               class="w-24 h-24 object-cover rounded-xl border border-yellow-400/20"
             >
-            <div>
-              <h3 class="text-xl font-semibold <%= item.product.textcolor %>"><%= item.product.name %></h3>
+            <div class="min-w-0">
+              <h3 class="text-xl font-semibold truncate <%= item.product.textcolor %>"><%= item.product.name %></h3>
 
               <% if (item.product.discount > 0 && item.product.discount < item.product.price) { %>
                 <div class="mt-1 space-x-2">
@@ -49,20 +51,25 @@
               <!-- Quantity Buttons -->
               <div class="mt-4 flex items-center space-x-2">
                 <form action="/decrease-qty/<%= item.product._id %>" method="POST">
-                  <button class="bg-yellow-400 text-black w-7 h-7 rounded-full font-bold hover:bg-yellow-300">-</button>
+                  <button type="submit" class="bg-yellow-400 text-black w-8 h-8 rounded-full font-bold hover:bg-yellow-300 transition">-</button>
                 </form>
-                <span class="px-3 py-1 bg-gray-800 text-white rounded-md"><%= item.quantity %></span>
+                <span class="px-4 py-1 bg-gray-800 text-white rounded-md select-none"><%= item.quantity %></span>
                 <form action="/increase-qty/<%= item.product._id %>" method="POST">
-                  <button class="bg-yellow-400 text-black w-7 h-7 rounded-full font-bold hover:bg-yellow-300">+</button>
+                  <button type="submit" class="bg-yellow-400 text-black w-8 h-8 rounded-full font-bold hover:bg-yellow-300 transition">+</button>
                 </form>
               </div>
             </div>
           </div>
 
           <!-- Remove Button -->
-          <div class="text-right">
+          <div class="mt-4 sm:mt-0 flex justify-end w-full sm:w-auto">
             <form action="/remove-from-cart/<%= item.product._id %>" method="POST">
-              <button class="text-red-500 hover:underline text-sm">Remove</button>
+              <button
+                type="submit"
+                class="text-red-500 hover:text-red-400 font-semibold text-base underline decoration-1 underline-offset-2"
+              >
+                Remove
+              </button>
             </form>
           </div>
         </div>
@@ -132,7 +139,7 @@
   setTimeout(() => {
     const flash = document.getElementById("flash-message");
     if (flash) flash.remove();
-  }, 500);
+  }, 1500);
 </script>
 
 <%- include('./partials/footer') %>

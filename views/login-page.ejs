@@ -1,0 +1,79 @@
+<%- include('./partials/header') %>
+
+<body class="flex flex-col min-h-screen">
+
+  <% if (userCreated.length > 0) { %>
+    <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
+      <%= userCreated %>
+    </div>
+  <% } %>
+
+  <% if (error.length > 0) { %>
+    <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow z-50">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <div class="absolute top-4 right-6 z-50">
+    <a href="/owners/login" class="bg-white text-black font-semibold px-4 py-2 rounded-md shadow hover:bg-gray-200 transition">
+      Login as Owner
+    </a>
+  </div>
+
+  <main class="flex-grow flex flex-col items-center px-4 sm:px-8 py-10 sm:py-14 text-white font-serif bg-[url('/images/image.png')]  lg:bg-[url('/images/image1.png')] lg:bg-cover lg:bg-center lg:bg-no-repeat">
+
+    <!-- Black Box Heading with border on all screens -->
+    <div class="bg-black/80 px-6 py-4 rounded-lg shadow mb-6 sm:mb-5 mt-10 sm:mt-4 border border-white w-full max-w-lg">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white text-center">
+        Welcome Back to Clutche
+      </h1>
+    </div>
+
+    <!-- Login Panel -->
+    <div class="w-full max-w-lg bg-black/70 backdrop-blur-sm p-6 sm:p-10 rounded-xl shadow-lg border border-white sm:border-gray-700 mb-8">
+      <h4 class="text-xl sm:text-2xl font-semibold mb-6">Login to your account</h4>
+
+      <form autocomplete="off" action="/users/login" method="post" class="space-y-4">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <input
+          type="submit"
+          value="Login"
+          class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition"
+        />
+      </form>
+
+      <p class="text-center text-sm mt-6 text-white/70">
+        Don't have an account?
+        <a href="/" class="text-blue-400 hover:underline">Register</a>
+      </p>
+    </div>
+
+  </main>
+
+  <%- include('./partials/footer') %>
+
+  <script>
+    setTimeout(() => {
+      const flash = document.getElementById('flash-message');
+      if (flash) {
+        flash.style.opacity = '0';
+        flash.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => flash.remove(), 300);
+      }
+    }, 1000);
+  </script>
+
+</body>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-white text-black font-sans text-sm leading-relaxed px-6 py-10">
+
+  <div class="max-w-3xl mx-auto border border-gray-300 rounded-xl shadow p-8">
+    
+    <!-- Brand -->
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h1 class="text-3xl font-extrabold text-black tracking-wide">Clutche</h1>
+        <p class="text-sm text-gray-500 font-semibold">Premium Bag Invoice</p>
+      </div>
+      <div class="text-sm text-right">
+        <p><strong>Date:</strong> <%= new Date(billDetails.date).toLocaleDateString('en-IN') %></p>
+        <p><strong>Time:</strong> <%= new Date(billDetails.date).toLocaleTimeString('en-IN') %></p>
+        <p><strong>Order ID:</strong> <%= billDetails.orderId %></p>
+      </div>
+    </div>
+
+    <hr class="border-t border-gray-400 mb-6" />
+
+    <!-- Customer + Payment Info -->
+    <div class="grid grid-cols-2 gap-6 mb-6">
+      <div>
+        <h2 class="text-lg font-semibold mb-2 text-gray-800">Customer Info</h2>
+        <p><strong>Name:</strong> <%= billDetails.fullname %></p>
+        <p><strong>Phone:</strong> <%= billDetails.phone %></p>
+        <p><strong>Email:</strong> <%= billDetails.email %></p>
+        <p><strong>Address:</strong> <%= billDetails.address %></p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold mb-2 text-gray-800">Payment Info</h2>
+        <p><strong>Payment Method:</strong> <%= billDetails.paymentMethod.toUpperCase() %></p>
+        <p><strong>Status:</strong> Paid</p>
+      </div>
+    </div>
+
+    <hr class="border-t border-gray-400 mb-6" />
+
+    <!-- Item List -->
+    <h2 class="text-lg font-semibold mb-3 text-gray-800">Items Ordered</h2>
+    <table class="w-full border border-gray-300 border-collapse text-sm mb-6">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2 text-left">#</th>
+          <th class="border border-gray-300 px-4 py-2 text-left">Item</th>
+          <th class="border border-gray-300 px-4 py-2 text-center">Qty</th>
+          <th class="border border-gray-300 px-4 py-2 text-right">Price (₹)</th>
+          <th class="border border-gray-300 px-4 py-2 text-right">Total (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% let subtotal = 0;
+           billDetails.items.forEach((item, index) => {
+             const qty = item.quantity || 1;
+             const price = Number(item.discount > 0 && item.discount < item.price ? item.discount : item.price);
+             const total = qty * price;
+             subtotal += total;
+        %>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2"><%= index + 1 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= item.name %></td>
+          <td class="border border-gray-300 px-4 py-2 text-center"><%= qty %></td>
+          <td class="border border-gray-300 px-4 py-2 text-right">₹<%= price.toLocaleString() %></td>
+          <td class="border border-gray-300 px-4 py-2 text-right">₹<%= total.toLocaleString() %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <hr class="border-t border-gray-400 mb-6" />
+
+    <!-- Summary -->
+    <div class="text-right space-y-1 mb-6">
+      <p><strong>Subtotal:</strong> ₹<%= subtotal.toLocaleString() %></p>
+      <p><strong>Shipping:</strong> ₹199</p>
+      <p class="text-lg font-semibold"><strong>Total:</strong> ₹<%= (subtotal + 199).toLocaleString() %></p>
+    </div>
+
+    <hr class="border-t border-gray-400 mb-6" />
+
+    <!-- Footer -->
+    <div class="text-center text-xs text-gray-500">
+      This is a system-generated invoice by <strong>Clutche</strong>. No signature required.
+    </div>
+  </div>
+</body>
+</html>

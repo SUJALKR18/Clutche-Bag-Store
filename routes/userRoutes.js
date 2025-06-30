@@ -10,6 +10,12 @@ router.get("/" , function(req ,res){
 
 router.post("/register" , upload.single('profile'), registerUser);
 
+router.get("/login-page" , function(req , res){
+    let userCreated = req.flash("userCreated");
+    let error = req.flash("error");
+    res.render("login-page", { userCreated, error, loggedin: false });
+})
+
 router.post("/login" , loginUser);
 
 module.exports = router;

@@ -4,7 +4,10 @@ const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const productModel = require('../models/product-model');
 const userModel = require('../models/user-model');
 const router = express.Router();
-
+const puppeteer = require("puppeteer");
+const fs = require("fs");
+const path = require("path");
+const ejs = require("ejs");
 
 router.get("/" , function(req ,res){
     let userCreated = req.flash("userCreated");
@@ -201,6 +204,69 @@ router.post("/decrease-qty/:id", isLoggedIn, async (req, res) => {
     res.redirect("/shop/cart");
 });
   
+
+router.get("/invoice/:orderId" , isLoggedIn , function(req ,res){
+    let orderId = req.params.orderId;
+    let user = req.user;
+    let billDetails = user.orders.find(order => order.orderId === orderId);
+    if (!billDetails) {
+        return res.status(404).send("Order not found");
+    }
+    res.render("invoice", {
+      billDetails,
+      pdfMode: false, 
+    });
+      
     
-    
+})
+
+
+router.get("/download-invoice/:orderId", isLoggedIn, async function (req, res) {
+  try {
+    const user = req.user;
+    const orderId = req.params.orderId;
+
+    const billDetails = user.orders.find((order) => order.orderId === orderId);
+    if (!billDetails) {
+      return res.status(404).send("Order not found");
+    }
+
+    // Render EJS to HTML with pdfMode flag
+    const invoicePath = path.join(__dirname, "../views/invoice.ejs");
+    const html = await ejs.renderFile(invoicePath, {
+      billDetails,
+      pdfMode: true,
+    });
+
+    // Puppeteer PDF Generation
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+
+    await page.setContent(html, { waitUntil: "networkidle0" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      margin: { top: "30px", bottom: "30px", left: "25px", right: "25px" },
+    });
+
+    await browser.close();
+
+    // Send PDF as download
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename=Clutche_Invoice_${orderId}.pdf`,
+      "Content-Length": pdfBuffer.length,
+    });
+
+    return res.send(pdfBuffer);
+  } catch (err) {
+    console.error("PDF generation failed:", err);
+    return res
+      .status(500)
+      .send("Something went wrong while generating the invoice.");
+  }
+});
+  
+
 module.exports = router;

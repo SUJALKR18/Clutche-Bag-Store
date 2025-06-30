@@ -1,78 +1,78 @@
 <%- include('./partials/header') %>
 
-<% if (userCreated.length > 0) { %>
-  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
-    <%= userCreated %>
-  </div>
-<% } %>
+<body class="flex flex-col min-h-screen">
 
-<% if (error.length > 0) { %>
-  <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow z-50">
-    <%= error %>
+  <% if (userCreated.length > 0) { %>
+    <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow z-50">
+      <%= userCreated %>
+    </div>
+  <% } %>
+
+  <% if (error.length > 0) { %>
+    <div id="flash-message" class="fixed top-5 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow z-50">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <div class="absolute top-4 right-6 z-50">
+    <a href="/owners/login" class="bg-white text-black font-semibold px-4 py-2 rounded-md shadow hover:bg-gray-200 transition">
+      Login as Owner
+    </a>
   </div>
-<% } %>
-<div class="absolute top-4 right-6 z-50">
-  <a href="/owners/login" class="bg-white text-black font-semibold px-4 py-2 rounded-md shadow hover:bg-gray-200 transition">
-    Login as Owner
-  </a>
-</div>
-<div class="min-h-screen flex flex-col lg:flex-row items-stretch text-white font-serif bg-cover bg-center bg-no-repeat" style="background-image: url('/images/image1.png');">
-  <!-- Register Panel -->
-  <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
-    <div class="w-full max-w-md bg-black/60 backdrop-blur-sm p-10 rounded-xl shadow-lg border border-gray-700">
-      <h3 class="text-3xl font-bold mb-2">Welcome to <span class="font-bold">Clutche</span></h3>
-      <h4 class="text-lg font-semibold mb-6">Create your account</h4>
+
+  <main class="flex-grow flex flex-col items-center px-4 sm:px-8 py-10 sm:py-14 text-white font-serif bg-[url('/images/image.png')] lg:bg-[url('/images/image1.png')] lg:bg-cover lg:bg-center lg:bg-no-repeat">
+
+    <div class="bg-black/80 px-6 py-4 rounded-lg shadow mb-6 sm:mb-5 mt-10 sm:mt-4 border border-white w-full max-w-lg">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white text-center">
+        Welcome to Clutche
+      </h1>
+    </div>
+
+    <div class="w-full max-w-lg bg-black/70 backdrop-blur-sm p-6 sm:p-10 rounded-xl shadow-lg border border-white sm:border-gray-700 mb-8">
+      <h4 class="text-xl sm:text-2xl font-semibold mb-6">Create your account</h4>
 
       <form autocomplete="off" action="/users/register" method="post" enctype="multipart/form-data" class="space-y-4">
         <input type="text" name="fullname" placeholder="Full Name"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
         <input type="email" name="email" placeholder="Email"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
         <input type="password" name="password" placeholder="Password"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        
-        <!-- Contact Field -->
+
         <input type="text" name="contact" placeholder="Contact Number"
           class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
 
-        <!-- Profile Pic Upload Field -->
-        <label class="block text-sm font-medium text-bold text-xl text-white/80">Profile Picture : </label>
-        <input type="file" name="profile" accept="image/*"
-          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition" />
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-white/80">Profile Picture:</label>
+          <input type="file" name="profile" accept="image/*"
+            class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-white file:text-black hover:file:bg-gray-200 transition" />
+        </div>
 
         <input type="submit" value="Create My Account"
           class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition" />
       </form>
+
+      <p class="text-center text-sm mt-6 text-white/70">
+        Already a user? 
+        <a href="/users/login-page" class="text-blue-400 hover:underline">Login</a>
+      </p>
     </div>
-  </div>
 
-  <!-- Login Panel -->
-  <div class="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
-    <div class="w-full max-w-md bg-black/60 backdrop-blur-sm p-10 rounded-xl shadow-lg border border-gray-700">
-      <h4 class="text-2xl font-semibold mb-6">Login to your account</h4>
+  </main>
 
-      <form autocomplete="off" action="/users/login" method="post" class="space-y-4">
-        <input type="email" name="email" placeholder="Email"
-          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <input type="password" name="password" placeholder="Password"
-          class="bg-black/70 text-white w-full px-4 py-3 border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <input type="submit" value="Login"
-          class="w-full bg-white text-black font-semibold py-3 rounded-md cursor-pointer shadow hover:bg-gray-200 transition" />
-      </form>
-    </div>
-  </div>
-</div>
+  <%- include('./partials/footer') %>
 
-<!-- Flash Auto-Hide Script -->
-<script>
-  setTimeout(() => {
-    const flash = document.getElementById('flash-message');
-    if (flash) {
-      flash.style.opacity = '0';
-      flash.style.transition = 'opacity 0.5s ease';
-      setTimeout(() => flash.remove(), 300);
-    }
-  }, 1000);
-</script>
+  <script>
+    setTimeout(() => {
+      const flash = document.getElementById('flash-message');
+      if (flash) {
+        flash.style.opacity = '0';
+        flash.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => flash.remove(), 300);
+      }
+    }, 1000);
+  </script>
 
-<%- include('./partials/footer') %>
+</body>

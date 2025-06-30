@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const expressSession = require('express-session');
 const flash = require('connect-flash');
+const mongooseConnection = require("./config/mongoose-connection");
 
 require("dotenv").config();
 
@@ -33,6 +34,9 @@ app.use("/products" , productRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+mongooseConnection.once("open", () => {
+  console.log("MongoDB connection is open. Starting server...");
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
 });
