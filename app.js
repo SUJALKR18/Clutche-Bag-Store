@@ -5,6 +5,8 @@ const path = require('path');
 const expressSession = require('express-session');
 const flash = require('connect-flash');
 const mongooseConnection = require("./config/mongoose-connection");
+const puppeteer = require("puppeteer");
+const dbgr = require("debug")("development:app");
 
 require("dotenv").config();
 
@@ -33,6 +35,9 @@ app.use("/users" , userRoutes);
 app.use("/products" , productRoutes);
 
 const PORT = process.env.PORT || 3000;
+
+dbgr("Puppeteer Chrome Path:", puppeteer.executablePath());
+
 
 mongooseConnection.once("open", () => {
   console.log("MongoDB connection is open. Starting server...");
