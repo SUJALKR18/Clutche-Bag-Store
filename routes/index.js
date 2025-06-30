@@ -230,25 +230,35 @@ router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
     const billDetails = user.orders.find((order) => order.orderId === orderId);
     if (!billDetails) return res.status(404).send("Order not found");
 
-    // Step 1: Render EJS template to HTML
     const invoicePath = path.join(__dirname, "../views/invoice.ejs");
     const html = await ejs.renderFile(invoicePath, {
       billDetails,
-      pdfMode: true, // optional flag if you want different styles
+      pdfMode: true,
     });
 
-    // Step 2: Launch Puppeteer with chrome-aws-lambda
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: (await chromium.executablePath) || undefined,
-      headless: chromium.headless,
-    });
+    let browser;
+
+    // 🧠 Detect environment (Render.com has 'RENDER' env var set)
+    const isRender = process.env.RENDER;
+
+    if (isRender) {
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+      });
+    } else {
+      const puppeteerLocal = require("puppeteer");
+      browser = await puppeteerLocal.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      });
+    }
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
 
-    // Step 3: Generate PDF
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -257,7 +267,6 @@ router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
 
     await browser.close();
 
-    // Step 4: Send the PDF
     res.set({
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename=Clutche_Invoice_${orderId}.pdf`,
@@ -272,7 +281,6 @@ router.get("/download-invoice/:orderId", isLoggedIn, async (req, res) => {
       .send("Something went wrong while generating invoice.");
   }
 });
-  
   
 
 module.exports = router;
