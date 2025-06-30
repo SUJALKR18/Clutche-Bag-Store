@@ -231,28 +231,33 @@ router.get("/download-invoice/:orderId", isLoggedIn, async function (req, res) {
       return res.status(404).send("Order not found");
     }
 
-    // Render EJS to HTML with pdfMode flag
+    const ejs = require("ejs");
+    const path = require("path");
+    const puppeteer = require("puppeteer");
+
     const invoicePath = path.join(__dirname, "../views/invoice.ejs");
     const html = await ejs.renderFile(invoicePath, {
       billDetails,
-      pdfMode: true,
+      pdfMode: true, // optional flag if you use conditional formatting
     });
 
-    // Puppeteer PDF Generation
-    const browser = await puppeteer.launch({ headless: "new" });
-    const page = await browser.newPage();
+    // ✅ Use the updated launch config here:
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
 
+    const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
-      margin: { top: "30px", bottom: "30px", left: "25px", right: "25px" },
+      margin: { top: "20px", bottom: "20px", left: "30px", right: "30px" },
     });
 
     await browser.close();
 
-    // Send PDF as download
     res.set({
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename=Clutche_Invoice_${orderId}.pdf`,
